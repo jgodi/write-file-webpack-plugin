@@ -21,7 +21,6 @@
     "file"
   ],
   "scripts": {
-    "prepublish": "npm run build",
     "pragmatist": "node ./node_modules/.bin/pragmatist --es5",
     "lint": "npm run pragmatist lint",
     "test": "npm run pragmatist test",
