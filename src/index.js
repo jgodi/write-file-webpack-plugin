@@ -2,9 +2,7 @@ import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import mkdirp from 'mkdirp';
-import {
-    createHash
-} from 'crypto';
+import { createHash } from 'crypto';
 import chalk from 'chalk';
 import moment from 'moment';
 import filesize from 'filesize';
@@ -13,22 +11,17 @@ import filesize from 'filesize';
  * When 'webpack' program is used, constructor name is equal to 'NodeOutputFileSystem'.
  * When 'webpack-dev-server' program is used, constructor name is equal to 'MemoryFileSystem'.
  */
-const isMemoryFileSystem = (outputFileSystem: Object): boolean => {
+const isMemoryFileSystem = (outputFileSystem:Object):boolean => {
     return outputFileSystem.constructor.name === 'MemoryFileSystem';
 };
 
 /**
+ * userOptions
  * @property test A regular expression used to test if file should be written. When not present, all bundle will be written.
  * @property useHashIndex Use hash index to write only files that have changed since the last iteration (default: true).
  * @property log Logs names of the files that are being written (or skipped because they have not changed) (default: true).
  */
-type UserOptionsType = {
-    test: ?RegExp,
-    useHashIndex: ?boolean,
-    log: ?boolean
-};
-
-export default (userOptions: UserOptionsType = {}): Object => {
+export default (userOptions = {}):Object => {
     const options = _.assign({}, {
         log: true,
         test: null,
@@ -51,10 +44,7 @@ export default (userOptions: UserOptionsType = {}): Object => {
         if (!options.log) {
             return;
         }
-
-        /* eslint-disable no-console */
-        console.log(chalk.dim('[' + moment().format('HH:mm:ss') + '] [write-file-webpack-plugin]'), ...append);
-        /* eslint-enable no-console */
+        console.log(chalk.dim('[' + moment().format('HH:mm:ss') + '] [write-file-webpack-plugin]'), ...append); // eslint-disable-line
     };
 
     const assetSourceHashIndex = {};
@@ -66,7 +56,7 @@ export default (userOptions: UserOptionsType = {}): Object => {
             setupDone,
             setupStatus;
 
-        const setup = (): boolean => {
+        const setup = ():boolean => {
             if (setupDone) {
                 return setupStatus;
             }
@@ -106,13 +96,7 @@ export default (userOptions: UserOptionsType = {}): Object => {
             if (!setup()) {
                 return;
             }
-
-            if (stats.compilation.errors.length) {
-                return;
-            }
-
-            log('stats.compilation.errors.length is "' + chalk.cyan(stats.compilation.errors.length) + '".');
-
+            
             _.forEach(stats.compilation.assets, (asset, assetPath) => {
                 const outputFilePath = path.join(outputPath, assetPath);
                 const relativeOutputPath = path.relative(process.cwd(), outputFilePath);
